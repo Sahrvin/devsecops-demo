@@ -12,6 +12,44 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Install security tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl gnupg lsb-release
+          # Install hadolint
+          curl -Lo /usr/local/bin/hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
+          chmod +x /usr/local/bin/hadolint
+          # Install trivy
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+          # Install gitleaks
+          curl -sSL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_8.18.0_Linux_x86_64.tar.gz | tar -xz
+          chmod +x gitleaks
+
+      - name: Secret scanning
+        run: ./gitleaks detect --source . --verbose
+
+      - name: Dockerfile linting
+        run: hadolint Dockerfile
+
+      - name: Build Docker image
+        run: docker build -t my-app:latest .
+
+      - name: Vulnerability scanning
+        run: trivy image --severity CRITICAL,HIGH my-app:latest
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Build Docker image
         run: docker build -t my-app:latest .
 
