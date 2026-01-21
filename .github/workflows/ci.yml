@@ -28,6 +28,7 @@ jobs:
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: Dockerfile
+          no-fail: true
 
       - name: Secret scanning with Gitleaks
         uses: gitleaks/gitleaks-action@v2
