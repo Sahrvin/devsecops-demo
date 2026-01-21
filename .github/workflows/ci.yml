@@ -1,36 +1,23 @@
-name: CI
-
-on:
-  push:
-    branches: ["main"]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      # 1) Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2) Secret scanning
-      - name: Secret scanning
+      - name: Build Docker image
+        run: docker build -t my-app:latest .
+
+      - name: Run Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@v0.33.1
+        with:
+          scan-type: image
+          scan-ref: my-app:latest
+          severity: CRITICAL,HIGH
+
+      - name: Dockerfile linting with Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+
+      - name: Secret scanning with Gitleaks
         uses: gitleaks/gitleaks-action@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      # 3) Dockerfile linting
-      - name: Dockerfile linting
-        uses: hadolint/hadolint-action@v3.0.0
-
-      # 4) Build Docker image
-      - name: Build container
-        run: docker build -t my-app:latest .
-
-      # 5) Vulnerability scanning
-      - name: Vulnerability scanning
-        uses: aquasecurity/trivy-action@v0.33.1
-        with:
-          scan-type: "image"
-          image-ref: "my-app:latest"
-          severity: "HIGH,CRITICAL"
