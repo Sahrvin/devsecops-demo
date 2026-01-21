@@ -12,23 +12,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Secret scanning
       - name: Gitleaks scan
-        uses: zricethezav/gitleaks-action@v8
+        uses: zricethezav/gitleaks-action@v8.15.0
 
-      # Dockerfile linting
       - name: Dockerfile Lint
-        uses: hadolint/hadolint-action@v3
+        uses: hadolint/hadolint-action@v2.11.0
         with:
           dockerfile: Dockerfile
 
-      # Build Docker image
       - name: Build Docker image
         run: docker build -t my-app:latest .
 
-      # Vulnerability scanning with Trivy
       - name: Trivy Scan
-        uses: aquasecurity/trivy-action@v1
+        uses: aquasecurity/trivy-action@v0.0.28
         with:
           image-ref: my-app:latest
           severity: CRITICAL,HIGH
+
