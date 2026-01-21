@@ -2,16 +2,16 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Checkout
+      # 1) Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -21,10 +21,10 @@ jobs:
 
       # 3) Run Trivy vulnerability scan
       - name: Run Trivy vulnerability scan
-        uses: uses: aquasecurity/trivy-action@v1
+        uses: aquasecurity/trivy-action@v1
         with:
-          scan-type: image
-          scan-ref: my-app:latest
+          image-ref: my-app:latest
+          format: table
           severity: CRITICAL,HIGH
 
       # 4) Dockerfile linting with Hadolint
@@ -37,4 +37,4 @@ jobs:
       - name: Secret scanning with Gitleaks
         uses: gitleaks/gitleaks-action@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
