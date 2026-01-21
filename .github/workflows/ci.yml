@@ -21,7 +21,7 @@ jobs:
 
       # 3) Run Trivy vulnerability scan
       - name: Run Trivy vulnerability scan
-        uses: aquasecurity/trivy-action@v0.33.1
+        uses: uses: aquasecurity/trivy-action@v1
         with:
           scan-type: image
           scan-ref: my-app:latest
