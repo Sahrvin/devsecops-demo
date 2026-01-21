@@ -16,11 +16,11 @@ jobs:
       # Step 2: Secret scanning
       - name: Secret scanning
         uses: zricethezav/gitleaks-action@v8.18.0
-
+        
       # Step 3: Dockerfile linting
       - name: Dockerfile linting
         uses: hadolint/hadolint-action@v2.12.0
-
+        
       # Step 4: Build Docker image
       - name: Build Docker image
         run: docker build -t my-app:latest .
