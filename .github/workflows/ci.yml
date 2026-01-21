@@ -22,12 +22,13 @@ jobs:
           chmod +x hadolint
           sudo mv hadolint /usr/local/bin/
 
-         # Install trivy for container vulnerability scanning
-TRIVY_VERSION="0.68.2"
-curl -Lo trivy.tar.gz https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz
-tar zxvf trivy.tar.gz
-sudo mv trivy /usr/local/bin/
-rm trivy.tar.gz
+            # Install trivy for container vulnerability scanning
+- name: Install trivy
+  run: |
+    TRIVY_VERSION=0.68.2
+    curl -sfL https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz | tar -xz
+    sudo mv trivy /usr/local/bin/
+    trivy --version
 
           # Install Gitleaks
           curl -sSL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_8.18.0_Linux_x86_64.tar.gz -o gitleaks.tar.gz
