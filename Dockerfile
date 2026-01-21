@@ -1,12 +1,18 @@
-FROM python:3.9
+FROM python:3.9-slim
+
+RUN useradd -m appuser
 
 WORKDIR /app
 
 COPY app.py .
 
-RUN pip install flask
+RUN pip install --no-cache-dir flask
 
-ENV API_KEY=12345-secret
+USER appuser
 
 CMD ["python", "app.py"]
+
+
+
+
 
